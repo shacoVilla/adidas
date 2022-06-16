@@ -1,0 +1,12 @@
+-------------------------------------------------------------------------------
+Test set: com.adidas.subscription.domain.service.DomainSubscriptionServiceTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed: 17.338 s <<< FAILURE! - in com.adidas.subscription.domain.service.DomainSubscriptionServiceTest
+shouldReturnAListOfSubscriptions  Time elapsed: 3.563 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<200> but was:<404>
+	at com.adidas.subscription.domain.service.DomainSubscriptionServiceTest.shouldReturnAListOfSubscriptions(DomainSubscriptionServiceTest.java:71)
+
+shouldCreateSubscription  Time elapsed: 2.464 s  <<< FAILURE!
+java.lang.AssertionError: Status expected:<201> but was:<404>
+	at com.adidas.subscription.domain.service.DomainSubscriptionServiceTest.shouldCreateSubscription(DomainSubscriptionServiceTest.java:54)
+

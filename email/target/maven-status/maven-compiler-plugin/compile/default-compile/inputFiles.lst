@@ -1,0 +1,9 @@
+C:\Users\danie\OneDrive\Documents\Adidas\Adidas-Challenge\email\src\main\java\com\adidas\email\application\rest\EmailController.java
+C:\Users\danie\OneDrive\Documents\Adidas\Adidas-Challenge\email\src\main\java\com\adidas\email\domain\Email.java
+C:\Users\danie\OneDrive\Documents\Adidas\Adidas-Challenge\email\src\main\java\com\adidas\email\application\response\CreateEmailNotificationResponse.java
+C:\Users\danie\OneDrive\Documents\Adidas\Adidas-Challenge\email\src\main\java\com\adidas\email\domain\service\EmailService.java
+C:\Users\danie\OneDrive\Documents\Adidas\Adidas-Challenge\email\src\main\java\com\adidas\email\EmailApplication.java
+C:\Users\danie\OneDrive\Documents\Adidas\Adidas-Challenge\email\src\main\java\com\adidas\email\application\request\CreateEmailNotificationRequest.java
+C:\Users\danie\OneDrive\Documents\Adidas\Adidas-Challenge\email\src\main\java\com\adidas\email\domain\service\DomainEmailService.java
+C:\Users\danie\OneDrive\Documents\Adidas\Adidas-Challenge\email\src\main\java\com\adidas\email\domain\DomainException.java
+C:\Users\danie\OneDrive\Documents\Adidas\Adidas-Challenge\email\src\main\java\com\adidas\email\infrastructure\configuration\BeanConfiguration.java
