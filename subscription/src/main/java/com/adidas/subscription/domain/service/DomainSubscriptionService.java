@@ -1,38 +1,22 @@
 package com.adidas.subscription.domain.service;
 
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
 
-import com.adidas.subscription.application.request.CreateEmailNotificationRequest;
 import com.adidas.subscription.application.request.SubscriptionRequest;
-import com.adidas.subscription.application.response.EmailResponse;
 import com.adidas.subscription.application.response.SubscriptionResponse;
 import com.adidas.subscription.domain.Subscription;
 import com.adidas.subscription.domain.repository.SubscriptionRepository;
 
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Mono;
 
 @Service
 @Slf4j
 public class DomainSubscriptionService implements SubscriptionService {
 
 	private SubscriptionRepository subscriptionRepository;
-
-	@Autowired
-	private Environment env;
-
-	@Autowired
-	private WebClient webClient;
 
 	public DomainSubscriptionService(SubscriptionRepository subscriptionRepository) {
 		this.subscriptionRepository = subscriptionRepository;
@@ -64,39 +48,17 @@ public class DomainSubscriptionService implements SubscriptionService {
 	}
 
 	@Override
-	public Long createNewSubscription(SubscriptionRequest request) {
+	public SubscriptionResponse createNewSubscription(SubscriptionRequest request) {
 
 		Subscription subscription = Subscription.builder().firstname(request.getFirstname()).gender(request.getGender())
 				.datebirth(request.getDatebirth()).consent(request.getConsent()).newsletterid(request.getNewsletterid())
 				.email(request.getEmail()).build();
 
-		Long subscriptionId = subscriptionRepository.save(subscription);
-		log.info("subscription {} has been saved", subscriptionId);
+		Subscription subscriptionSaved = subscriptionRepository.save(subscription);
+		log.info("subscription {} has been saved", subscriptionSaved.getId());
 
-		sendEmailNotification(request, subscriptionId);
+		return mapToSubscriptionResponse(subscriptionSaved);
 
-		return subscriptionId;
-
-	}
-
-	private void sendEmailNotification(SubscriptionRequest request, Long subscriptionId) {
-		CreateEmailNotificationRequest emailNotification = CreateEmailNotificationRequest.builder()
-				.firstname(request.getFirstname()).newsletterid(request.getNewsletterid())
-				.subscriptionid(subscriptionId).build();
-
-		Mono<CreateEmailNotificationRequest> mono = Mono.just(emailNotification);
-
-		String hostname = env.getProperty("email.service.hostname");
-
-		String uriEmailService = String.format("http://%s:8087/email-notif", hostname);
-
-		EmailResponse response = webClient.post().uri(uriEmailService)
-				.header(HttpHeaders.CONTENT_LENGTH,
-						mono.map(s -> s.toString().getBytes(StandardCharsets.UTF_8).length).block().toString())
-				.header(HttpHeaders.HOST, "subscriptions").body(BodyInserters.fromValue(emailNotification))
-				.accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(EmailResponse.class).block();
-
-		log.info("email notification sent: {}", response != null ? response.getCreated() : false);
 	}
 
 	private SubscriptionResponse mapToSubscriptionResponse(Subscription subscription) {
