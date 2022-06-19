@@ -31,13 +31,11 @@ public class DatabaseSubscriptionRepository implements SubscriptionRepository {
 	}
 
 	@Override
-	public Long save(Subscription subscription) {
+	public Subscription save(Subscription subscription) {
 		SubscriptionEntity entity = new SubscriptionEntity(subscription);
 		repo.save(entity);
-		
-		Long id = entity.getId();
-		return id;
 
+		return entity.toSubscription();
 	}
 
 	@Override
