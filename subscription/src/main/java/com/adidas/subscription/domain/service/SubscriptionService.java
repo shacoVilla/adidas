@@ -7,7 +7,7 @@ import com.adidas.subscription.application.response.SubscriptionResponse;
 
 public interface SubscriptionService {
 	
-	Long createNewSubscription(SubscriptionRequest subscription);
+	SubscriptionResponse createNewSubscription(SubscriptionRequest subscription);
 	
 	void cancelExistingSubscription(Long id);
 	
