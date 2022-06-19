@@ -9,7 +9,7 @@ public interface SubscriptionRepository {
 	
 	Optional<Subscription> findById(Long id);
 
-    Long save(Subscription subscription);
+	Subscription save(Subscription subscription);
     
     void remove(Subscription subscription);
     
