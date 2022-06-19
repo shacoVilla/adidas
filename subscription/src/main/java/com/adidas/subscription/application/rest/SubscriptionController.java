@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.adidas.subscription.application.request.SubscriptionRequest;
 import com.adidas.subscription.application.response.CreateSubscriptionResponse;
 import com.adidas.subscription.application.response.SubscriptionResponse;
+import com.adidas.subscription.domain.service.EmailNotificationService;
 import com.adidas.subscription.domain.service.SubscriptionService;
 
 @RestController
@@ -25,19 +26,25 @@ import com.adidas.subscription.domain.service.SubscriptionService;
 public class SubscriptionController {
 
 	private final SubscriptionService subscriptionService;
+	
+	private final EmailNotificationService emailService;
 
 	@Autowired
-	public SubscriptionController(SubscriptionService subscriptionService) {
+	public SubscriptionController(SubscriptionService subscriptionService, EmailNotificationService emailService) {
 		this.subscriptionService = subscriptionService;
+		this.emailService = emailService;
 	}
 
 	@PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	CreateSubscriptionResponse createNewSubscription(@RequestBody final SubscriptionRequest subscriptionRequest) {
 
-		Long id = subscriptionService.createNewSubscription(subscriptionRequest);
+		SubscriptionResponse response = subscriptionService.createNewSubscription(subscriptionRequest);
+		
+		if (response != null)
+			emailService.sendEmailNotification(response);
 
-		return new CreateSubscriptionResponse(id);
+		return new CreateSubscriptionResponse(response.getId());
 	}
 
 	@DeleteMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
