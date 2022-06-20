@@ -67,46 +67,8 @@ In this case i will use minikube as a local Kubernetes so:
 
 * Start minikube with the command `minikube start`
 
-* Create a deployment.yml file with the necessary information for the docker image you are going to run in a kubernetes pod:
-
-``` 
-apiVersion: v1 # Kubernetes API version
-kind: Service # Kubernetes resource kind we are creating
-metadata: # Metadata of the resource kind we are creating
-  name: email-service
-spec:
-  selector:
-    app: email-service
-  ports:
-    - protocol: "TCP"
-      port: 8087 # The port that the service is running on in the cluster
-      targetPort: 8087 # The port exposed by the service
-  type: LoadBalancer # type of the service. LoadBalancer indicates that our service will be external.
----
-apiVersion: apps/v1
-kind: Deployment # Kubernetes resource kind we are creating
-metadata:
-  name: email-service
-spec:
-  selector:
-    matchLabels:
-      app: email-service
-  replicas: 2 # Number of replicas that will be created for this deployment
-  template:
-    metadata:
-      labels:
-        app: email-service
-    spec:
-      containers:
-        - name: adidas/email-service
-          image: adidas/email-service:latest # Image that will be used to containers in the cluster
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 8087 
-```
-
-* In the same location of thsi file, run this command `kubectl run email-service --image=adidas/email-service:latest --image-pull-policy=Never`
-this command specifies the name of the pod to be created, the image what you are going to use and the policy for kubernetes to handle the image
+* Run this command `kubectl run email-service --image=adidas/email-service:latest --image-pull-policy=Never` (using the email service image as an example).
+This command specifies the name of the pod to be created, the image what you are going to use and the policy for kubernetes to handle the image
 
 # Image Pull Policy TIP #
 If imagePullPolicy is set to Always, Kubernetes will always pull the image from the Repository. With IfNotPresent, Kubernetes will only pull the image when it does not already exist on the node. While with imagePullPolicy set to Never, Kubernetes will never pull the image
