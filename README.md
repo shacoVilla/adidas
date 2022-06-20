@@ -1,4 +1,4 @@
-# adidas
+# ADIDAS
 Project based on the adidas technical challenge which is based on the following architecture 
 
 ![image](https://user-images.githubusercontent.com/16137987/174175103-8b0e47d8-e264-46af-b010-9e1c522c078b.png)
@@ -53,5 +53,65 @@ In the root path there is a docker-compose.yml which is defined to start all the
 Once you have the token, create a new Postman request with the header *Authorization* passing the token as value. The gateway service will handle the token to ensure that you are authorized.
 ![image](https://user-images.githubusercontent.com/16137987/174502484-2ab8f973-28d7-4365-9e43-d4e197523cc4.png)
 
+# How to deploy your docker images to Kubernetes cluster
+In this case i will use minikube as a local Kubernetes so:
+
+* Install Kubectl tool https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/ Is a command line tool for Kubernetes
+* Check your docker images in your local repo (take note of your image name and tag to deploy in kubernetes) i.e: the email service
+![image](https://user-images.githubusercontent.com/16137987/174675321-affa7089-0528-440b-b906-a825121a4e4e.png)
+## Minikube Instalation ##
+### Requisites ###
+![image](https://user-images.githubusercontent.com/16137987/174675596-f2810176-860d-4d94-a224-478e785b8d94.png)
+
+* Run this in a command terminal `winget install minikube`. Wail till the instalation finished
+
+* Start minikube with the command `minikube start`
+
+* Create a deployment.yml file with the necessary information for the docker image you are going to run in a kubernetes pod:
+
+``` 
+apiVersion: v1 # Kubernetes API version
+kind: Service # Kubernetes resource kind we are creating
+metadata: # Metadata of the resource kind we are creating
+  name: email-service
+spec:
+  selector:
+    app: email-service
+  ports:
+    - protocol: "TCP"
+      port: 8087 # The port that the service is running on in the cluster
+      targetPort: 8087 # The port exposed by the service
+  type: LoadBalancer # type of the service. LoadBalancer indicates that our service will be external.
+---
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: email-service
+spec:
+  selector:
+    matchLabels:
+      app: email-service
+  replicas: 2 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: email-service
+    spec:
+      containers:
+        - name: adidas/email-service
+          image: adidas/email-service:latest # Image that will be used to containers in the cluster
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8087 
+```
+
+* In the same location of thsi file, run this command `kubectl run email-service --image=adidas/email-service:latest --image-pull-policy=Never`
+this command specifies the name of the pod to be created, the image what you are going to use and the policy for kubernetes to handle the image
+
+# Image Pull Policy TIP #
+If imagePullPolicy is set to Always, Kubernetes will always pull the image from the Repository. With IfNotPresent, Kubernetes will only pull the image when it does not already exist on the node. While with imagePullPolicy set to Never, Kubernetes will never pull the image
+
+* Now, after running the kubectl run command, just execute this command and you will see your pod running `kubectl get pods`
+![image](https://user-images.githubusercontent.com/16137987/174677095-f0744cbe-c3ba-47ee-a922-7896c278bb99.png)
 
 
