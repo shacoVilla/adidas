@@ -14,6 +14,15 @@ Adding a new microservice is easy, as the discovery server will automatically di
 # Architecture design
 As part of creating a scalable approach, the subscription service has been designed using the Domain Driven Design pattern. DDD is a strategy based on modeling your business using OOP, implementing business requirements directly within the model. DDD helps building software more effective, by allowing better mutual understanding between software programmers and business experts.
 
+## Domain layer
+Domain layer is a layer of business logic that should implement reality-reflecting business processes. By using a clear and understandable representation of the business model, new employees in a given project can be easily implemented. In a transparent form, we can also talk about the details of the application with non-technical people. Each business model should have a clearly defined Bounded Context.
+
+## Infrastructure layer
+The infrastructure layer supports communication between layers. It is responsible for communication with external websites, access to data (persistance storage) or to other resources, e.g. rabbitmq, elasticsearch etc.
+
+## Application Layer
+Provides communication with Domain Layer. Due to the fact that domain objects cannot leak outside of the domain area, domain objects created at the DL level are wrapped in DTO (Data Transfer Object) and in this form returns them to the UI layer.
+
 ![image](https://user-images.githubusercontent.com/16137987/174503057-5d98dc56-56e3-4306-98fd-279b51e81e7e.png)
 
 
