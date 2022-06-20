@@ -28,7 +28,6 @@ services:
       - email-service
     environment:
       eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka
-      EMAILHOST: email-service
   email-service:
     build: ./email
     image: adidas/email-service
