@@ -33,9 +33,9 @@ This project contains one discovery service using Netflix Eureka. Every Micro se
 Using this strategy, the subscription service will be protected as being filtered by the gateway. This public gatewayserv ice  uses JSON Web Tokens to ensure that the end-user would have access to the subscription service  only by using a token given by the authentication service. The public gateway service will automatically discover and route API requests to the service that owns the route. This proxying technique is equally helpful when developing user interfaces, as the full API of the platform is available through its own host as a proxy.
 
 # CI/CD Pipeline
-In general purpose, every microservice would be localted in a repository controlled by git. Git would allow me to version and define my semantic versioning for releases.
-Each microservice contains a Dockerfile which Jenkins would use to create and contenirize Docker images.
-Each microservice contains a Deployment YAML file to define the creation of pods and replicas that runs this docker image
+In general purpose, every microservice would be localted in a repository controlled by git. *Git* would allow me to version and define my semantic versioning for releases.
+Each microservice contains a *Dockerfile* which Jenkins would use to create and contenirize Docker images.
+Each microservice contains a *Deployment YAML* file to define the creation of pods and replicas that runs this docker image
 ![Pipeline](https://user-images.githubusercontent.com/16137987/174551361-9ffbf7cb-42c0-4834-8256-9ea20fb8bb33.png)
 
 
